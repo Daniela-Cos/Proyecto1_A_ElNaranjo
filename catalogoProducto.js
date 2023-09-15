@@ -16,10 +16,4 @@ const productos = [
         }
     ];
 
-   /* function catalogoProductos() {
-        return productos;
-      }
-
-module.exports = {catalogoProductos};*/
-
 module.exports = productos;
