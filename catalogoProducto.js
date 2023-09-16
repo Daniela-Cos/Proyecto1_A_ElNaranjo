@@ -1,6 +1,3 @@
-/*Por el momento se utilizará un arreglo para almacenar datos a modo de ejemplo, 
-mas adelante se debe conectar la DB*/
-
 const productos = [    
         {id: 1,
             nombre: "Producto-1", marca: "marca-1", disponible: true, descuento: 80, precioDescuento: 25,
@@ -17,3 +14,6 @@ const productos = [
     ];
 
 module.exports = productos;
+
+/*Por el momento se utilizará un arreglo para almacenar datos a modo de ejemplo, 
+mas adelante se debe conectar la DB*/
