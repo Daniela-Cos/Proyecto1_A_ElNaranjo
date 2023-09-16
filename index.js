@@ -7,7 +7,7 @@ const validaciontoken = require('./validaciontoken')
 app.use(express.json());
 
 
-
+//Módulo validación Usuario
 const validarUser = require('./validarusuario');
 
 app.get('/api/validarusuarios', (req, res, next) => {
@@ -25,6 +25,7 @@ app.get('/api/validarusuarios', (req, res, next) => {
 
 });
 
+//Validación Token
   app.post('/api/login', (req, res) => {
     const { correoElectronico, clave } = req.body;
 
@@ -36,7 +37,7 @@ app.get('/api/validarusuarios', (req, res, next) => {
     res.json({ Mensaje: 'Inicio de sesión exitoso', Token: token });
    }); 
 
-  // Método GET para obtener información del perfil
+// Método GET para obtener información del perfil
 
 app.get('/api/perfil/:DPI',  (req, res, next) => {
   const DPI = req.params.DPI;
@@ -49,10 +50,9 @@ app.get('/api/perfil/:DPI',  (req, res, next) => {
   res.json(usuario);
 });
 
-
+// Método POST para eliminar un perfil
 app.post('/api/perfil/:DPI',  (req, res, next) => {
   validaciontoken.validarToken(req.headers.token)
-  
 
   const DPI = req.params.DPI;
   const usuarioExistente = usuarios.find((user) => user.DPI === DPI);
@@ -65,7 +65,6 @@ app.post('/api/perfil/:DPI',  (req, res, next) => {
     return res.status(400).json({ Mensaje: 'Cuerpo de solicitud vacío' });
   }
 
-  
   // Validar campos obligatorios
   if (!nuevoUsuario.NIT || !nuevoUsuario.CorreoElectronico) {
     return res.status(400).json({ Mensaje: 'NIT y CorreoElectronico son campos obligatorios' });
@@ -77,7 +76,7 @@ app.post('/api/perfil/:DPI',  (req, res, next) => {
   });
 
 
-  // Método DELETE para eliminar un perfil
+// Método DELETE para eliminar un perfil
 app.delete('/api/perfil/:DPI', validarToken, (req, res, next) => {
   const DPI = req.params.DPI;
   const index = usuarios.findIndex((user) => user.DPI === DPI);
@@ -96,5 +95,9 @@ app.get("/", function (req, res ){
 
 });
 
-app.listen(8081);
+//Iniciar el servidor
+const PORT = process.env.PORT || 8081;
+app.listen(PORT, () => {
+    console.log(`Servidor escuchando en el puerto ${PORT}`);
+});
 
