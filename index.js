@@ -89,11 +89,67 @@ app.delete('/api/perfil/:DPI', validarToken, (req, res, next) => {
   res.json({ Mensaje: 'Perfil eliminado con éxito' });
 });
 
+//Módulo Catálogo de Productos:
+const moduloCatalogo = require('./catalogoProducto');
 
-app.get("/", function (req, res ){
-    res.send('Hello world')
-
+app.get('/api/producto', (req, res) => {
+  validaciontoken.validarToken(req.headers.token);
+    const catalogo = moduloCatalogo;
+    if (catalogo){
+      res.json(catalogo);
+    }else {
+      res.status(404).json({ Mensaje: 'Catalogo vacio' });
+    }
 });
+
+//Módulo de Gestion de Producto:
+const moduloProducto = require('./gestionProducto');
+
+app.get('/api/producto/:id', (req, res) => {
+  validaciontoken.validarToken(req.headers.token);
+    const producto = moduloProducto.obtenerProducto(req.params.id);
+    if (producto){
+      res.json(producto);
+    }else {
+      res.status(404).json({ Mensaje: 'Producto no encontrado' });
+    }
+});
+
+app.post('/api/producto/:id', (req, res) => {
+  validaciontoken.validarToken(req.headers.token);
+  const agregar = moduloProducto.agregarProducto();
+  if (agregar){
+    res.json(agregar);
+  }else {
+    res.status(404).json({ Mensaje: 'Producto no encontrado' });
+  }
+});
+
+app.delete('/api/producto/:id', (req, res) => {
+  validaciontoken.validarToken(req.headers.token);
+  const eliminar = moduloProducto.eliminarProducto(req.params.id);
+  if (eliminar){
+    res.json({ message: 'Producto eliminado con éxito' });
+  }else {
+    res.status(404).json({ Mensaje: 'Producto no encontrado' });
+  }
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //Iniciar el servidor
 const PORT = process.env.PORT || 8081;
