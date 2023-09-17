@@ -31,8 +31,8 @@ function obtenerProducto (id) {
     moduloCatalogo.push(producto);
   }
   
-  function eliminarProducto(req) {
-    const index = moduloCatalogo.findIndex((producto) => producto.id === parseInt(req.params.id));
+  function eliminarProducto(id) {
+    const index = moduloCatalogo.findIndex((producto) => producto.id === parseInt(id));
     if (index !== -1) {
       moduloCatalogo.splice(index, 1);
       moduloCatalogo.habilitado = false;
