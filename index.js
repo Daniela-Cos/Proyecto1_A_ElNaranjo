@@ -135,20 +135,59 @@ app.delete('/api/producto/:id', (req, res) => {
   }
 });
 
+//Módulo de Carrito de compra:
+const moduloCarrito = require('./carritoCompra');
+app.get('/api/carrito', (req, res) =>{
+  const carrito = moduloCarrito.obtenerCarrito(1);
+  if (!carrito){
+    res.status(404).json({ Mensaje: 'Carrito de compra no encontrado' });
+  }
+  console.log(carrito);
+  const detalleCarrito = {
+    // revisar aquí el problema del map
+    items: carrito.items.map((item) => {
+      const catalogo = moduloProducto.obtenerProducto(item.idProducto)
+      return { 
+        cantidad: item.cantidad,
+        producto: catalogo,
+      };
+    }),
+  };
+  res.json(detalleCarrito);
+});
 
+app.post('/api/carrito', (req, res) =>{
+  const { dpi, idProducto, nuevaCantidad } = req.body;
+  const actualizarCantidad = moduloCarrito.actualizarCantidad(dpi, idProducto, nuevaCantidad);
+  if (actualizarCantidad) {
+    res.json({ message: 'Cantidad actualizada exitosamente'});
+  } else {
+    res.status(404).json({ message: 'Producto no encontrado en el carrito' }); 
+  }
+});
 
+app.delete('/api/carrito', (req, res) =>{
+  const { dpi, productoId } = req.body;
+  const eliminarCantidad = moduloCarrito.eliminarCarrito(dpi, productoId);
 
+  if (eliminarCantidad){
+    res.json({ message: 'Producto eliminado con éxito' });
+  }else {
+    res.status(404).json({ Mensaje: 'Producto no encontrado' });
+  }
+})
 
-
-
-
-
-
-
-
-
-
-
+//Módulo de Compra:
+const moduloCompra = require('./compra');
+app.post('/api/compra', (req, res) =>{
+  const { idProducto, cantidad } = req.body;
+  const compra = moduloCompra.procesarCompra(idProducto, cantidad);
+  if (compra) {
+    return `Compra exitosa.`;
+  } else {
+    return 'No se pudo completar la compra. Verifica la disponibilidad del producto.';
+  }
+})
 
 
 //Iniciar el servidor
