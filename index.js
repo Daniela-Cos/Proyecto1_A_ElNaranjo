@@ -77,7 +77,8 @@ app.post('/api/perfil/:DPI',  (req, res, next) => {
 
 
 // Método DELETE para eliminar un perfil
-app.delete('/api/perfil/:DPI', validarToken, (req, res, next) => {
+app.delete('/api/perfil/:DPI',  (req, res, next) => {
+  validaciontoken.validarToken(req.headers.token)
   const DPI = req.params.DPI;
   const index = usuarios.findIndex((user) => user.DPI === DPI);
 
